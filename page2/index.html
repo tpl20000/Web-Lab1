@@ -88,24 +88,103 @@
     
     </style>
     
+    
+    
     <form>
         <fieldset>
             <dl>
                 <dd><legend>Калькулятор вкладов</legend></dd>
             
-                <dd><select class="select-css" required>
+                <dd><select class="select-css" id="type" required>
                     <option selected disabled>Вид вклада</option>
                     <option value="replenishable">Пополняемый</option>
                     <option value="express">Срочный</option>
                 </select></dd>
-    
-                <dd><select class="select-css" required>
+                
+                
+                
+                <dd><select class="select-css" id="term" required>
                     <option selected disabled>Срок вклада</option>
                     </select></dd>
                     
-                <dd><input class="input-css" type="text" name="sum" placeholder="Сумма, руб."></dd>
+                    <script>
     
-                <dd><button class="input-css">Расчитать</button></dd>
+        var select = document.getElementById('type');
+        var select2 = document.getElementById('term');
+        var amount = document.getElementById('amount');
+        var calcButton = document.getElementById('calcButton');
+        var output = document.getElementById('output');
+        
+        var termOptionsReplenishable = ["6 месяцев - 20%", "1 год - 22%","1,5 года - 15%","2 года - 10%"];
+        var termOptionsExpress = ["3 месяца - 20%", "6 месяцев - 22%","9 месяцев - 23%","1 год - 24%","1,5 года - 18%", "2 года - 15%"];
+
+        select.addEventListener('change', setTerms);
+        calcButton.addEventListener('click', calculate);
+    
+        function removeOptions(selectElement) 
+        {
+        var i, L = selectElement.options.length - 1;
+        for(i = L; i >= 0; i--) { selectElement.remove(i); }
+        }
+
+        function setTerms()
+        {
+        
+            var type = select.value;
+            
+            removeOptions(select2);
+
+            switch(type)
+            {
+            
+                case 'replenishable':
+                
+
+                for(i = 0; i < termOptionsReplenishable.length; i++)
+                {
+
+                    option = document.createElement('option');
+                    option.text = termOptionsReplenishable[i];
+                    select2.add(option);
+
+                }
+
+                break
+                
+                case 'express':
+                for(i = 0; i < termOptionsExpress.length; i++)
+                {
+
+                    option = document.createElement('option');
+                    option.text = termOptionsExpress[i];
+                    select2.add(option);
+
+                }
+                break
+            
+            }
+        
+        }
+    
+        function calculate()
+        {
+
+            output.value += "Вклад \"";
+            output.value += select.value;
+            output.value += "\" на срок: ";
+            output.value += select2.value;
+            output.value += " на сумму ";
+            output.value += amount.value;
+        }
+
+
+                </script>
+                    
+                <dd><input class="input-css" id="amount" type="text" name="sum" placeholder="Сумма, руб."></dd>
+    
+                <dd><button class="input-css" id="calcButton">Расчитать</button></dd>
+
+                <dd id="output"></dd>
             </dl>
             
         </fieldset>
