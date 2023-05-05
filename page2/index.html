@@ -178,6 +178,16 @@
                     var words = str.split(' ');
                     var rate = words[3];
                     rate = rate.substring(0, rate.length - 1);
+                    var months = words[0];
+                    var period = words[1];
+                    
+                    months = months.replace(',', '.');
+
+                    var monthsTmp = parseFloat(months);
+
+                    if(period == 'год' || period == 'года') months *= 12;
+
+                    var result = parseInt(amount.value * (((parseFloat(parseInt(rate)/12) * months)) + 100) / 100, 10);
 
                     outputStr = 'Вклад \"';
                     outputStr += select[select.selectedIndex].text;
@@ -186,11 +196,9 @@
                     outputStr += ' на сумму ';
                     outputStr += amount.value;
                     outputStr += '. В конце срока вы получите ';
-                    outputStr += parseInt(amount.value * (parseInt(rate) + 100) / 100, 10);
+                    outputStr += result;
 
-                    console.log(words);
-                    console.log(amount.value);
-                    console.log(rate);
+                    console.log('Words: ', words, ', amount: ', amount.value, ', rate: ', rate, ', months: ', months);
 
                     output.textContent = outputStr;
 
