@@ -88,10 +88,7 @@
     
     </style>
     
-    
-    
     <form>
-        <fieldset>
             <dl>
                 <dd><legend>Калькулятор вкладов</legend></dd>
             
@@ -107,87 +104,101 @@
                     <option selected disabled>Срок вклада</option>
                     </select></dd>
                     
-                    <script>
-    
-        var select = document.getElementById('type');
-        var select2 = document.getElementById('term');
-        var amount = document.getElementById('amount');
-        var calcButton = document.getElementById('calcButton');
-        var output = document.getElementById('output');
-        
-        var termOptionsReplenishable = ["6 месяцев - 20%", "1 год - 22%","1,5 года - 15%","2 года - 10%"];
-        var termOptionsExpress = ["3 месяца - 20%", "6 месяцев - 22%","9 месяцев - 23%","1 год - 24%","1,5 года - 18%", "2 года - 15%"];
-
-        select.addEventListener('change', setTerms);
-        calcButton.addEventListener('click', calculate);
-    
-        function removeOptions(selectElement) 
-        {
-        var i, L = selectElement.options.length - 1;
-        for(i = L; i >= 0; i--) { selectElement.remove(i); }
-        }
-
-        function setTerms()
-        {
-        
-            var type = select.value;
-            
-            removeOptions(select2);
-
-            switch(type)
-            {
-            
-                case 'replenishable':
-                
-
-                for(i = 0; i < termOptionsReplenishable.length; i++)
-                {
-
-                    option = document.createElement('option');
-                    option.text = termOptionsReplenishable[i];
-                    select2.add(option);
-
-                }
-
-                break
-                
-                case 'express':
-                for(i = 0; i < termOptionsExpress.length; i++)
-                {
-
-                    option = document.createElement('option');
-                    option.text = termOptionsExpress[i];
-                    select2.add(option);
-
-                }
-                break
-            
-            }
-        
-        }
-    
-        function calculate()
-        {
-
-            output.value += "Вклад \"";
-            output.value += select.value;
-            output.value += "\" на срок: ";
-            output.value += select2.value;
-            output.value += " на сумму ";
-            output.value += amount.value;
-        }
-
-
-                </script>
                     
-                <dd><input class="input-css" id="amount" type="text" name="sum" placeholder="Сумма, руб."></dd>
+                    
+                <dd><input class="input-css" required id="amount" type="text" name="sum" placeholder="Сумма, руб."></dd>
     
-                <dd><button class="input-css" id="calcButton">Расчитать</button></dd>
+                <dd><button class="input-css" type="button" id="calcButton">Расчитать</button></dd>
 
-                <dd id="output"></dd>
+                <dd><p id="output"></p></dd>
             </dl>
+
+            <script>
+    
+                const select = document.getElementById('type');
+                const select2 = document.getElementById('term');
+                const amount = document.getElementById('amount');
+                const calcButton = document.getElementById('calcButton');
+                const output = document.getElementById('output');
+                
+                var termOptionsReplenishable = ["6 месяцев - 20%", "1 год - 22%","1,5 года - 15%","2 года - 10%"];
+                var termOptionsExpress = ["3 месяца - 20%", "6 месяцев - 22%","9 месяцев - 23%","1 год - 24%","1,5 года - 18%", "2 года - 15%"];
+        
+                select.addEventListener('change', setTerms);
+                calcButton.addEventListener('click', calculate);
+        
+                function removeOptions(selectElement) 
+                {
+                var i, L = selectElement.options.length - 1;
+                for(i = L; i >= 0; i--) { selectElement.remove(i); }
+                }
+        
+                function setTerms()
+                {
+                
+                    var type = select.value;
+                    
+                    removeOptions(select2);
+        
+                    switch(type)
+                    {
+                    
+                        case 'replenishable':
+                        for(i = 0; i < termOptionsReplenishable.length; i++)
+                        {
+        
+                            option = document.createElement('option');
+                            option.text = termOptionsReplenishable[i];
+                            select2.add(option);
+        
+                        }
+        
+                        break
+                        
+                        case 'express':
+                        for(i = 0; i < termOptionsExpress.length; i++)
+                        {
+        
+                            option = document.createElement('option');
+                            option.text = termOptionsExpress[i];
+                            select2.add(option);
+        
+                        }
+                        break
+                    
+                    }
+                
+                }
             
-        </fieldset>
+                function calculate()
+                {
+
+                    var outputStr = '';
+                    var str = select2[select2.selectedIndex].text;
+                    var words = str.split(' ');
+                    var rate = words[3];
+                    rate = rate.substring(0, rate.length - 1);
+
+                    outputStr = 'Вклад \"';
+                    outputStr += select[select.selectedIndex].text;
+                    outputStr += '\" на ';
+                    outputStr += select2[select2.selectedIndex].text;
+                    outputStr += ' на сумму ';
+                    outputStr += amount.value;
+                    outputStr += '. В конце срока вы получите ';
+                    outputStr += parseInt(amount.value * (parseInt(rate) + 100) / 100, 10);
+
+                    console.log(words);
+                    console.log(amount.value);
+                    console.log(rate);
+
+                    output.textContent = outputStr;
+
+                }
+        
+        
+                        </script>
+
     </form>
 
 </html>
